@@ -48,7 +48,7 @@ This method returns data.results as an array of entries, or data.error.
 This method invites a user to your Slack group.
 
 ````javascript
-slackform.inviteUser(typeformEntry).then(function (data) {});
+slackform.inviteUser(typeformEntry.answers).then(function (data) {});
 ````
 
 This method returns data.success or data.error.
