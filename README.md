@@ -1,12 +1,10 @@
 # slackform by lucasjgordon
-slackform.js is a Parse Cloud Code module that will allow you to automatically invite any new Typeform submissions to your Slack community.
+slackform.js is a Parse Cloud Code module that will allow you to automatically invite new Typeform submissions to your Slack community.
 
 Created by [lucasjgordon](http://www.lucasjgordon.com)
 
-License: [Attribution-ShareAlike 4.0 International](http://creativecommons.org/licenses/by-sa/4.0/deed.en_US)
-
 ## Requirement
-This module is designed to be run on Parse Cloud Code. If you haven't used Parse before, they are an awesome BaaS service to help you get your apps up and running quickly across all platforms. Definitely [check them out](https://parse.com/).
+This module is designed to be run on Parse Cloud Code. If you haven't used Parse before, they offer an awesome BaaS service to help you get your apps up and running quickly across all platforms. Definitely [check them out](https://parse.com/).
 
 ## Basic Usage
 Add slackform.js to your /cloud directory. Then in main.js, include the module using:
@@ -19,7 +17,7 @@ Now you need to get your keys. You'll need you [Typeform API Key](https://admin.
 
 Finally, you need to know the name of the email field in the Typeform JSON response. Create a URL like this:
 
-https://api.typeform.com/v0/form/<TYPEFORM_ID>?key=<TYPEFORM_API_KEY>&completed=true&limit=1
+https://api.typeform.com/v0/form/TYPEFORM_ID?key=TYPEFORM_API_KEY&completed=true&limit=1
 
 Load it up, and in the questions array find the form entry that asks for the user's email address. You need the id of the email field, it should look something like this "email_4202153".
 
@@ -56,6 +54,8 @@ slackform.inviteUser(typeformEntry).then(function (data) {});
 This method returns "success" or "error".
 
 ##Example
+
+Add the following code to your main.js file, and set up a Cloud job to run every hour.
 
 ````javascript
 var slackform = require('cloud/slackform.js');
