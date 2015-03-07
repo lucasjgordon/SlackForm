@@ -4,10 +4,10 @@ slackform.js is a Parse Cloud Code module that will allow you to automatically i
 Created by [lucasjgordon](http://www.lucasjgordon.com)
 
 ## Requirement
-This module is designed to be run on Parse Cloud Code. If you haven't used Parse before, they offer an awesome BaaS service to help you get your apps up and running quickly across all platforms. Definitely [check them out](https://parse.com/).
+This module is designed to be run on [Parse Cloud Code](https://parse.com/). If you haven't used Parse before, they offer an awesome BaaS service to help you get your apps up and running quickly across all platforms.
 
 ## Basic Usage
-Add slackform.js to your /cloud directory. Then in main.js, include the module using:
+Add slackform.js to your cloud/ directory. Then in main.js, include the module using:
 
 ````javascript
 var slackform = require('cloud/slackform.js');
@@ -42,7 +42,7 @@ This method returns the Typeform submissions within the last hour.
 slackform.getTypeFormResults().then(function (data) {});
 ````
 
-This method returns "results" as an array of entries, or "error".
+This method returns data.results as an array of entries, or data.error.
 
 ###Invite User
 This method invites a user to your Slack group.
@@ -51,7 +51,7 @@ This method invites a user to your Slack group.
 slackform.inviteUser(typeformEntry).then(function (data) {});
 ````
 
-This method returns "success" or "error".
+This method returns data.success or data.error.
 
 ##Example
 
