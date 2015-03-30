@@ -13,7 +13,7 @@ Add slackform.js to your cloud/ directory. Then in main.js, include the module u
 var slackform = require('cloud/slackform.js');
 ````
 
-Now you need to get your keys. You'll need you [Typeform API Key](https://admin.typeform.com/account), and the name of your Slack group. Create a new Slack token [here](https://api.slack.com/web). You'll need your Typeform ID, which can be obtained from the URL of the actual form - it will look something like this "bU6FKI".
+Now you need to get your keys. You'll need you [Typeform API Key](https://admin.typeform.com/account) and the name of your Slack group. Create a new Slack token [here](https://api.slack.com/web). You'll need your Typeform ID, which can be obtained from the URL of the actual form - it will look something like this "bU6FKI".
 
 Finally, you need to know the name of the email field in the Typeform JSON response. Create a URL like this:
 
@@ -55,7 +55,9 @@ This method returns data.success or data.error.
 
 ##Example
 
-Add the following code to your main.js file, and set up a Cloud job to run every hour.
+If you haven't already, head over to [Parse](https://parse.com), create an account and set up a new app. Then follow [this handy guide](https://parse.com/docs/cloud_code_guide#started) to get set up with Parse Cloud Code.
+
+Once you have created your app directory, add slackform.js to the cloud/ folder, add the following code to your main.js file and enter your Typeform and Slack details. Deploy your app, head to the Parse dashboard and set up a new Cloud Code job. Set the script to run every hour, and you're all done!
 
 ````javascript
 var slackform = require('cloud/slackform.js');
