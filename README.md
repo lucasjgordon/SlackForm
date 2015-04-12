@@ -13,7 +13,7 @@ Add slackform.js to your cloud/ directory. Then in main.js, include the module u
 var slackform = require('cloud/slackform.js');
 ````
 
-Now you need to get your keys. You'll need you [Typeform API Key](https://admin.typeform.com/account) and the name of your Slack group. Create a new Slack token [here](https://api.slack.com/web). You'll need your Typeform ID, which can be obtained from the URL of the actual form - it will look something like this "bU6FKI".
+Now you need to get your keys. You'll need you [Typeform API Key](https://admin.typeform.com/account) and the name of your Slack group as it is shown in the group's url. Create a new Slack token [here](https://api.slack.com/web). You'll need your Typeform ID, which can be obtained from the URL of the actual form - it will look something like this "bU6FKI".
 
 Finally, you need to know the name of the email field in the Typeform JSON response. Create a URL like this:
 
