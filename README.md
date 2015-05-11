@@ -29,14 +29,15 @@ slackform.initialise({
 	typeformId: '<TYPEFORM_ID>',
 	typeformEmail: '<TYPEFORM_EMAIL_ID>',
 	slackChannel: '<SLACK_GROUP_NAME>',
-	slackToken: '<SLACK_TOKEN>'
+	slackToken: '<SLACK_TOKEN>',
+	inviteInterval: <BACKGROUND_JOB_FREQUENCY_IN_SECONDS>
 });
 ````
 
 ## Public Methods
 
 ###Get Typeform Results
-This method returns the Typeform submissions within the last hour.
+This method returns the Typeform submissions within the specified invite interval period in seconds.
 
 ````javascript
 slackform.getTypeFormResults().then(function (data) {});
@@ -57,7 +58,7 @@ This method returns data.success or data.error.
 
 If you haven't already, head over to [Parse](https://parse.com), create an account and set up a new app. Then follow [this handy guide](https://parse.com/docs/cloud_code_guide#started) to get set up with Parse Cloud Code.
 
-Once you have created your app directory, add slackform.js to the cloud/ folder, add the following code to your main.js file and enter your Typeform and Slack details. Deploy your app, head to the Parse dashboard and set up a new Cloud Code job. Set the script to run every hour, and you're all done!
+Once you have created your app directory, add slackform.js to the cloud/ folder, add the following code to your main.js file and enter your Typeform and Slack details. Deploy your app, head to the Parse dashboard and set up a new Cloud Code job. Set the script to run at the inviteInterval you specified, and you're all done!
 
 ````javascript
 var slackform = require('cloud/slackform.js');
@@ -67,7 +68,8 @@ slackform.initialise({
 	typeformId: '<TYPEFORM_ID>',
 	typeformEmail: '<TYPEFORM_EMAIL_ID>',
 	slackChannel: '<SLACK_GROUP_NAME>',
-	slackToken: '<SLACK_TOKEN>'
+	slackToken: '<SLACK_TOKEN>',
+	inviteInterval: <BACKGROUND_JOB_FREQUENCY_IN_SECONDS>
 });
 
 Parse.Cloud.job("inviteUsers", function (request, status) {
