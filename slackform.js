@@ -3,6 +3,7 @@ var typeformId;
 var typeformEmail;
 var slackChannel;
 var slackToken;
+var inviteInterval;
 
 module.exports = {
 	getTypeFormResults: function () {
@@ -12,10 +13,9 @@ module.exports = {
 				error: 'Need to initialise.'
 			});
 		} else {
-			var hour = 60 * 60 * 1;
-			var hourAgo = Math.floor(Date.now() / 1000) - hour;
+			var lastInviteTime = Math.floor(Date.now() / 1000) - inviteInterval;
 			Parse.Cloud.httpRequest({
-				url: 'https://api.typeform.com/v0/form/' + typeformId + '?key=' + typeformApiKey + '&completed=true&since=' + hourAgo,
+				url: 'https://api.typeform.com/v0/form/' + typeformId + '?key=' + typeformApiKey + '&completed=true&since=' + lastInviteTime,
 				success: function (httpResponse) {
 					if (httpResponse && httpResponse.data && httpResponse.data.responses && httpResponse.data.responses.length > 0) {
 						promise.resolve({
@@ -42,6 +42,7 @@ module.exports = {
 		typeformEmail = data.typeformEmail;
 		slackChannel = data.slackChannel;
 		slackToken = data.slackToken;
+		inviteInterval = data.inviteInterval;
 	},
 	inviteUser: function (user) {
 		var promise = new Parse.Promise();
