@@ -1,76 +1,69 @@
-var typeformApiKey;
-var typeformId;
-var typeformEmail;
-var slackChannel;
-var slackToken;
+var request = require('request');
 
-module.exports = {
-	getTypeFormResults: function () {
-		var promise = new Parse.Promise();
-		if (!typeformId || !typeformApiKey) {
-			promise.resolve({
-				error: 'Need to initialise.'
-			});
-		} else {
-			var hour = 60 * 60 * 1;
-			var hourAgo = Math.floor(Date.now() / 1000) - hour;
-			Parse.Cloud.httpRequest({
-				url: 'https://api.typeform.com/v0/form/' + typeformId + '?key=' + typeformApiKey + '&completed=true&since=' + hourAgo,
-				success: function (httpResponse) {
-					if (httpResponse && httpResponse.data && httpResponse.data.responses && httpResponse.data.responses.length > 0) {
-						promise.resolve({
-							results: httpResponse.data.responses
-						});
-					} else {
-						promise.resolve({
-							error: 'No results.'
-						});
-					}
-				},
-				error: function (error) {
-					promise.resolve({
-						error: error
-					});
-				}
-			});
+var Q = require('q');
+
+function invite (channel, email, token) {
+	var d = Q.defer();
+
+	request({
+		url: 'https://' + channel + '.slack.com/api/users.admin.invite',
+		method: 'POST',
+		qs: {
+			t: 1416723927
+		},
+		form: {
+			email: email,
+			token: token,
+			set_active: true,
+			_attempts: 1
 		}
-		return promise;
-	},
-	initialise: function (data) {
-		typeformApiKey = data.typeformApiKey;
-		typeformId = data.typeformId;
-		typeformEmail = data.typeformEmail;
-		slackChannel = data.slackChannel;
-		slackToken = data.slackToken;
-	},
-	inviteUser: function (user) {
-		var promise = new Parse.Promise();
-		Parse.Cloud.httpRequest({
-			method: 'POST',
-				url: 'https://' + slackChannel + '.slack.com/api/users.admin.invite?t=1416723927',
-			body: {
-				email: user[typeformEmail],
-				token: slackToken,
-				set_active: true,
-				_attempts: 1
-			},
-			success: function (httpResponse) {
-				if (httpResponse && httpResponse.data && !httpResponse.data.error && httpResponse.data.ok) {
-					promise.resolve({
-						success: true
-					});
-				} else {
-					promise.resolve({
-						error: 'Could not invite user'
-					});
-				}
-			},
-			error: function (error) {
-				promise.resolve({
-					error: error
-				});
-			}
+	}, function (error, response, body) {
+		body = JSON.parse(body);
+
+		if (error || !body || !body.ok) {
+			d.resolve(error || body && body.error || 'Could not invite user.');
+		} else {
+			d.resolve('Invited user.');
+		}
+	});
+
+	return d.promise;
+}
+
+var SlackForm = function (config) {
+	this.typeformApiKey = config.typeformApiKey;
+	this.typeformId = config.typeformId;
+	this.typeformEmail = config.typeformEmail;
+	this.slackChannel = config.slackChannel;
+	this.slackToken = config.slackToken;
+}
+
+SlackForm.prototype.invite = function (callback) {
+	var that = this;
+
+	var hour = 60 * 60 * 1;
+
+	request({
+		url: 'https://api.typeform.com/v0/form/' + this.typeformId,
+		method: 'GET',
+		qs: {
+			key: this.typeformApiKey,
+			completed: true,
+			since: Math.floor(Date.now() / 1000) - hour
+		}
+	}, function (error, response, body) {
+		var data = JSON.parse(body);
+
+		if (!data || !data.responses || !data.responses.length) {
+			return callback('No results.');
+		}
+
+		Q.all(data.responses.map(function (response) {
+			return invite(that.slackChannel, response.answers[that.typeformEmail], that.slackToken);
+		})).then(function (data) {
+			callback(null, data);
 		});
-		return promise;
-	}
-};
+	});
+}
+
+module.exports = SlackForm;
